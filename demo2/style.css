@@ -1,0 +1,5 @@
+#left-img ,#mid-img ,#right-img{
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+}

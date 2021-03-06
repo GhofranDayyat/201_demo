@@ -13,16 +13,8 @@ function Stor(location,min,max,avg,avgPerHour,total){
   this.avgPerHour=avgPerHour;
   this.sum=0;
   this.total=total;
-  Stor.all.push(this);
-  localStorage.setItem('newstor',JSON.stringify(Stor.all));
-}
-function retreve(){
-  if(localStorage.length>0){
-    Stor.all=JSON.parse(localStorage.getItem('newstor'));
-  }
-}
-Stor.all=[];
 
+}
 const mainSec = document.getElementById('main-section');
 const tabelEl = document.createElement('table');
 mainSec.appendChild(tabelEl);
@@ -102,7 +94,7 @@ const lima =new Stor(
 );
 lima.render();
 
-
+Stor.all=[];
 function creatFooter(){
   const footerRowEl = document.createElement('tr');
   tabelEl.appendChild(footerRowEl);
@@ -122,7 +114,17 @@ function creatFooter(){
     const min =parseFloat(event.target.min.value);
     const max =parseFloat(event.target.max.value);
     const avg =parseFloat(event.target.avg.value);
-    const newStor= new Stor(location,min,max,avg,[],[]);
+    let newStor= new Stor(location,min,max,avg,[],[]);
+    console.log(newStor);
+    Stor.all.push(newStor);
+    console.log(Stor.all);
+    localStorage.setItem('newstor',JSON.stringify(Stor.all));
+    function retreve(){
+      if(localStorage.length>0){
+        console.log('fkn;kh');
+        Stor.all=JSON.parse(localStorage.getItem('newstor'));
+      }
+    }
     retreve();
     tabelEl.deleteRow(-1);
     newStor.render();
