@@ -115,23 +115,10 @@ function createChart(){
     itemVots.push(Bus.all[i].vots);
     itemViews.push(Bus.all[i].views);
   }
-  function Stor(itemVt,itemVs){
-    this.itemVt=itemVt;
-    this.itemVs=itemVs;
-    Stor.all.push(this);
-    localStorage.setItem('stor',JSON.stringify(Stor.all));
-    console.log(Stor.all);
-  }
-  function retreve(){
-    if (localStorage.length>0){
-      Stor.all=JSON.parse(localStorage.getItem('stor'));
-      renderImg();
-      console.log(storV.itemVt)
-    }
-  }
-  Stor.all=[];
+
+
+
   const storV=new Stor(itemVots,itemViews);
-  retreve();
 
   var chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -157,4 +144,100 @@ function createChart(){
     options: {}
   });
 }
+function Stor(itemVt,itemVs){
+  this.itemVt=itemVt;
+  this.itemVs=itemVs;
+  Stor.all.push(this);
+  localStorage.setItem('stor',JSON.stringify(Stor.all));
 
+  retreve();
+}
+
+Stor.all=[];
+
+const storage = localStorage.getItem('stor');
+function retreve(){
+  if (storage){
+    const arrStorge = JSON.parse(storage);
+    for (let i = 0; i < arrStorge.length; i++) {
+      new Stor(arrStorge[i].itemVt);
+    }
+  }
+  // renderImg();
+  // imgSection.addEventListener('click',handelclick);
+
+}
+
+
+
+
+
+////app
+'use strict';
+
+const catForm = document.getElementById('cat-form');
+const catList = document.getElementById('cat-list');
+
+function Cat(name){
+  this.name = name;
+  Cat.all.push(this);
+}
+Cat.all = [];
+Cat.prototype.render = function(){
+  const listItem = document.createElement('li');
+  listItem.textContent = this.name;
+  catList.appendChild(listItem);
+}
+
+function handleCatSubmit(e){
+  e.preventDefault();
+  const newCat = new Cat(e.target.catName.value);
+  console.log(newCat)
+  catForm.reset();
+  newCat.render();
+  localStorage.setItem('cats',JSON.stringify(Cat.all));
+  console.log('this is what is in local storage', localStorage.getItem('cats'));
+}
+
+/////111111111110
+'use strict';
+const cats = localStorage.getItem('cats');
+if (cats) {
+  const catsFromLS = JSON.parse(cats);
+  for (let i = 0; i < catsFromLS.length; i++) {
+    // eslint-disable-next-line no-undef
+    new Cat(catsFromLS[i].name);
+    Cat.all[i].render();
+  }
+}
+
+catForm.addEventListener('submit', handleCatSubmit);
+
+
+
+//22222222
+'use strict';
+
+const catButton = document.getElementById('catButton');
+
+var handleCatButtonClick = function () {
+  const catsFromLS = JSON.parse(localStorage.getItem('cats'));
+  // Cat.all = catsFromLS;
+  // console.log('allCats array after retrieving from local storage', Cat.all[0]);
+  // console.log(
+  //   'allCats array after retrieving from local storage',
+  //   new Cat(Cat.all[0].name)
+  // );
+  // for (let i = 0; i < Cat.all.length; i++) {
+  //   Cat.all[i].render();
+  // }
+  // if (catsFromLS) {
+  for (let i = 0; i < catsFromLS.length; i++) {
+    const newCat = new Cat(catsFromLS[i].name);
+    newCat.render();
+  }
+  // }
+  console.log('allCats array after reinstantiating through our Cat constructor', Cat.all);
+};
+
+catButton.addEventListener('click', handleCatButtonClick);
